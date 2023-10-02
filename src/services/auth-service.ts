@@ -1,23 +1,19 @@
 import fetcher from "@/lib/api";
-import { TokenPayload } from "@/types/auth-types";
+import { SignInPayload } from "@/types/auth-types";
 
-export function authenticate(email: string, password: string): Promise<TokenPayload> {
-  return new Promise((resolve, reject) => {
-    const data = {
-      email: email,
-      password: password
-    };
-
-    fetcher
-      .Post("auth/signin", data)
-      .send()
-      .then((res) => {
-        console.log(res);
-        resolve(res as TokenPayload);
+export async function authenticate(email: string, password: string): Promise<SignInPayload | null> {
+  try {
+    const res = await fetcher("/auth/signin", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password
       })
-      .catch((err) => {
-        console.log(err);
-        reject(err);
-      });
-  });
+    });
+
+    return res as SignInPayload;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }

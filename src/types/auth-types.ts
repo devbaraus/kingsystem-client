@@ -1,10 +1,11 @@
+import { User } from "@/types/user-types";
+
 export type AuthDto = {
   email: string;
   password: string;
 };
 
 export type SignInPayload = {
-  email: string;
-  name: string;
+  user: User;
   access_token: string;
 };
