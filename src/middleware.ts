@@ -8,6 +8,6 @@ export default withAuth(function middleware() {}, {
   callbacks: {
     authorized: ({ req, token }) => {
       return !(publicRoutes.includes(req.nextUrl.pathname) && token === null);
-    }
-  }
+    },
+  },
 });

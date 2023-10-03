@@ -5,15 +5,18 @@ import ClientSessionProvider from "@/context/client-provider";
 import { ReactNode } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
+import Wrapper from "@/components/layout/wrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
     template: "%s • KingSystem",
-    default: "KingSystem"
+    default: "KingSystem",
   },
-  description: "KingSystem is a simple platform for creating and sharing systems."
+  description: "KingSystem is a simple platform for creating and sharing systems.",
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
@@ -22,7 +25,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ClientSessionProvider session={session}>{children}</ClientSessionProvider>
+        <ClientSessionProvider session={session}>
+          <Header />
+          <Wrapper>{children}</Wrapper>
+          <Footer />
+        </ClientSessionProvider>
       </body>
     </html>
   );

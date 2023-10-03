@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 
 export default function ClientSessionProvider({
   children,
-  session
+  session,
 }: {
   children: ReactNode;
   session: Session | null;

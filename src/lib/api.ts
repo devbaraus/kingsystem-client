@@ -3,9 +3,10 @@ export default async function fetcher(url: RequestInfo | URL, options: RequestIn
 
   const res = await fetch(`${baseUrl}${url}`, {
     headers: {
-      "Content-Type": "application/json; charset=utf-8"
+      "Content-Type": "application/json; charset=utf-8",
+      ...options?.headers,
     },
-    ...options
+    ...options,
   });
 
   if (!res.ok) {

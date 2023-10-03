@@ -1,7 +1,7 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { authenticate } from "@/services/auth-service";
-import { AuthDto } from "@/types/auth-types";
+import AuthService from "@/services/auth-service";
+import { AuthDto } from "@/types/auth-type";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -10,12 +10,13 @@ export const authOptions: AuthOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
 
       async authorize(credentials: AuthDto | undefined) {
         if (credentials) {
-          const res = await authenticate(credentials.email, credentials.password);
+          const res = await new AuthService().signIn(credentials.email, credentials.password);
+
           if (res) {
             return { ...res.user, access_token: res.access_token };
           } else {
@@ -24,8 +25,29 @@ export const authOptions: AuthOptions = {
         } else {
           return null;
         }
-      }
-    })
+      },
+    }),
   ],
-  session: { strategy: "jwt" }
+  callbacks: {
+    async session({ session, token }) {
+      return {
+        ...session,
+        user: {
+          id: token.sub,
+          ...session.user,
+        },
+        token: token.token,
+      };
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        const { access_token } = user as unknown as {
+          access_token: string;
+        };
+        token.token = access_token;
+      }
+      return token;
+    },
+  },
+  session: { strategy: "jwt" },
 };
