@@ -20,16 +20,55 @@ export type System = {
 };
 
 const BaseFieldsSchema = {
-  id: z.number(),
+  id: z.number({
+    required_error: "ID é obrigatório",
+  }),
   acronym: z
-    .string()
+    .string({
+      required_error: "Sigla é obrigatória",
+    })
+    .max(10, {
+      message: "Sigla não pode ter mais que 10 caracteres",
+    }),
+  description: z
+    .string({
+      required_error: "Descrição é obrigatória",
+    })
+    .max(100, {
+      message: "Descrição não pode ter mais que 100 caracteres",
+    }),
+  email: z
+    .string({
+      required_error: "E-mail é obrigatório",
+    })
+    .max(100, {
+      message: "E-mail não pode ter mais que 100 caracteres",
+    })
+    .email({
+      message: "E-mail inválido",
+    })
+    .optional(),
+  url: z
+    .string({
+      required_error: "Sigla é obrigatória",
+    })
+    .max(100, {
+      message: "URL não pode ter mais que 100 caracteres",
+    })
+    .url({
+      message: "URL inválida",
+    })
+    .optional(),
+  status: z.nativeEnum(SystemStatus, {
+    invalid_type_error: "Status inválido",
+    required_error: "Status é obrigatório",
+  }),
+  updateReason: z
+    .string({
+      required_error: "Sigla é obrigatória",
+    })
     .max(100)
-    .regex(/^[a-zA-Z0-9]+$/),
-  description: z.string().max(100),
-  email: z.string().max(100).email().optional(),
-  url: z.string().max(100).url().optional(),
-  status: z.nativeEnum(SystemStatus),
-  updateReason: z.string().max(100).optional(),
+    .optional(),
 };
 
 export const CreateSystemSchema = z.object({
