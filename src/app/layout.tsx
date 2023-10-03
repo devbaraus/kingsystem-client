@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import Wrapper from "@/components/layout/wrapper";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <ClientSessionProvider session={session}>
           <Header />
           <Wrapper>{children}</Wrapper>
+          <Toaster />
           <Footer />
         </ClientSessionProvider>
       </body>
