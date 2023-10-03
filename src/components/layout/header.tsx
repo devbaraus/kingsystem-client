@@ -119,7 +119,7 @@ export default async function Header() {
               </svg>
               <span className="sr-only">Toggle theme</span>
             </button>
-            <UserDropdownMenu name={session!.user?.name || "kingsystem"} />
+            <UserDropdownMenu name={session?.user?.name || "kingsystem"} />
           </nav>
         </div>
       </div>
