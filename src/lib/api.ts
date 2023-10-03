@@ -1,17 +1,20 @@
-export default async function fetcher(url: RequestInfo | URL, options: RequestInit | undefined) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:3000";
+import axios from "axios";
+import { getSession } from "next-auth/react";
 
-  const res = await fetch(`${baseUrl}${url}`, {
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-      ...options?.headers,
-    },
-    ...options,
-  });
+const fetcher = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+  headers: {
+    "Content-Type": "application/json; charset=utf-8",
+  },
+});
 
-  if (!res.ok) {
-    throw new Error("An error occurred while fetching the data.");
+fetcher.interceptors.request.use(async (request) => {
+  const session = await getSession();
+
+  if (session) {
+    request.headers["Authorization"] = `Bearer ${session.token}`;
   }
+  return request;
+});
 
-  return res.json();
-}
+export default fetcher;
