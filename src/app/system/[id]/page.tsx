@@ -9,6 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import SystemService from "@/services/system";
 import UserService from "@/services/user";
+import { SaveIcon, Undo2Icon } from "lucide-react";
 
 enum State {
   LOADING,
@@ -76,20 +77,21 @@ export default function Page() {
     >
       <div className="flex justify-between">
         <Button
-          className="uppercase"
+          className="gap-1"
           onClick={() => router.back()}
           type="button"
           variant="outline"
         >
           Voltar
+          <Undo2Icon className="inline-block h-5 w-5" />
         </Button>
 
         <Button
-          className="uppercase"
-          disabled={form.formState.isSubmitting}
+          className="gap-1"
           type="submit"
         >
           Salvar
+          <SaveIcon className="inline-block h-5 w-5" />
         </Button>
       </div>
     </UpdateFormSystem>

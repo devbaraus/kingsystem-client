@@ -7,6 +7,7 @@ import { CreateSystemDto, CreateSystemSchema } from "@/types/system";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SystemService from "@/services/system";
 import { Button } from "@/components/ui/button";
+import { SaveIcon, Undo2Icon } from "lucide-react";
 
 export default function Page() {
   const router = useRouter();
@@ -28,19 +29,21 @@ export default function Page() {
     >
       <div className="flex justify-between">
         <Button
-          className="uppercase"
+          className="gap-1"
           onClick={() => router.back()}
           type="button"
           variant="outline"
         >
           Voltar
+          <Undo2Icon className="inline-block h-5 w-5" />
         </Button>
 
         <Button
-          className="uppercase"
+          className="gap-1"
           type="submit"
         >
           Salvar
+          <SaveIcon className="inline-block h-5 w-5" />
         </Button>
       </div>
     </CreateFormSystem>
