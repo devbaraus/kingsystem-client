@@ -1,63 +1,47 @@
 "use client";
 
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
   FormField,
+  FormFieldSet,
   FormItem,
   FormLabel,
+  FormLegend,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateSystemDto, CreateSystemSchema } from "@/types/system-type";
-import { Button } from "@/components/ui/button";
-import { Asterisk } from "@phosphor-icons/react";
-import { useSession } from "next-auth/react";
-import SystemService from "@/services/system-service";
-import { useRouter } from "next/navigation";
+import { SubmitHandler, UseFormReturn } from "react-hook-form";
+import { CreateSystemDto } from "@/types/system";
+import { AsteriskIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-type Props = {} & HTMLAttributes<HTMLFormElement>;
+type Props = {
+  form: UseFormReturn<CreateSystemDto>;
+  children?: ReactNode;
+  onSubmit: SubmitHandler<CreateSystemDto>;
+} & Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
 
-export default function CreateFormSystem({ ...props }: Props) {
-  const router = useRouter();
-
-  const form = useForm<CreateSystemDto>({
-    resolver: zodResolver(CreateSystemSchema),
-  });
-
-  const { data: session } = useSession();
-
-  if (!session) {
-    return null;
-  }
-
-  const service = SystemService;
-
-  function onSubmit(data: CreateSystemDto) {
-    return service.create(data);
-  }
-
+export default function CreateFormSystem({ form, children, onSubmit, className, ...props }: Props) {
   return (
     <Form
       {...props}
       {...form}
     >
       <form
-        className="space-y-4"
+        className={cn("space-y-8", className)}
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <fieldset className="space-y-4">
-          <legend className="text-lg font-medium text-gray-900">Dados do sistema</legend>
+        <FormFieldSet className="space-y-4">
+          <FormLegend className="text-lg font-medium text-gray-900">Dados do sistema</FormLegend>
           <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Descrição <Asterisk className="inline-block text-destructive" />
+                  Descrição <AsteriskIcon className="inline-block h-3 w-3 text-destructive" />
                 </FormLabel>
                 <FormControl>
                   <Input {...field} />
@@ -72,7 +56,7 @@ export default function CreateFormSystem({ ...props }: Props) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Sigla <Asterisk className="inline-block text-destructive" />
+                  Sigla <AsteriskIcon className="inline-block h-3 w-3 text-destructive" />
                 </FormLabel>
                 <FormControl>
                   <Input {...field} />
@@ -108,25 +92,9 @@ export default function CreateFormSystem({ ...props }: Props) {
               </FormItem>
             )}
           />
-        </fieldset>
+        </FormFieldSet>
 
-        <div className="flex justify-between">
-          <Button
-            className="uppercase"
-            onClick={() => router.back()}
-            type="button"
-            variant="outline"
-          >
-            Voltar
-          </Button>
-
-          <Button
-            className="uppercase"
-            type="submit"
-          >
-            Salvar
-          </Button>
-        </div>
+        {children}
       </form>
     </Form>
   );
