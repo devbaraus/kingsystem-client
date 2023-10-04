@@ -1,4 +1,4 @@
-import { User } from "@/types/user-type";
+import { User } from "@/types/user";
 
 export type AuthDto = {
   email: string;

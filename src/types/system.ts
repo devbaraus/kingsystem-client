@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { User } from "@/types/user";
 
 export enum SystemStatus {
   ACTIVE = "ACTIVE",
@@ -46,8 +47,7 @@ const BaseFieldsSchema = {
     })
     .email({
       message: "E-mail inválido",
-    })
-    .optional(),
+    }),
   url: z
     .string({
       required_error: "Sigla é obrigatória",
@@ -57,35 +57,52 @@ const BaseFieldsSchema = {
     })
     .url({
       message: "URL inválida",
-    })
-    .optional(),
+    }),
   status: z.nativeEnum(SystemStatus, {
     invalid_type_error: "Status inválido",
     required_error: "Status é obrigatório",
   }),
   updateReason: z
     .string({
-      required_error: "Sigla é obrigatória",
+      required_error: "Justificativa é obrigatória",
     })
-    .max(100)
-    .optional(),
+    .nonempty({
+      message: "Justificativa é obrigatória",
+    })
+    .max(500, {
+      message: "Justificativa não pode ter mais que 100 caracteres",
+    }),
 };
 
 export const CreateSystemSchema = z.object({
   acronym: BaseFieldsSchema.acronym,
   description: BaseFieldsSchema.description,
-  email: BaseFieldsSchema.email,
-  url: BaseFieldsSchema.url,
+  email: BaseFieldsSchema.email.optional().or(z.literal("")),
+  url: BaseFieldsSchema.url.optional().or(z.literal("")),
 });
 
 export const UpdateSystemSchema = z.object({
   acronym: BaseFieldsSchema.acronym,
   description: BaseFieldsSchema.description,
-  email: BaseFieldsSchema.email,
-  url: BaseFieldsSchema.url,
+  email: BaseFieldsSchema.email.optional().or(z.literal("")),
+  url: BaseFieldsSchema.url.optional().or(z.literal("")),
   status: BaseFieldsSchema.status,
   updateReason: BaseFieldsSchema.updateReason,
 });
 
+export const FindSystemSchema = z.object({
+  acronym: BaseFieldsSchema.acronym.optional().or(z.literal("")),
+  description: BaseFieldsSchema.description.optional().or(z.literal("")),
+  email: BaseFieldsSchema.email.optional().or(z.literal("")),
+});
+
 export type CreateSystemDto = z.infer<typeof CreateSystemSchema>;
 export type UpdateSystemDto = z.infer<typeof UpdateSystemSchema>;
+
+export type UpdateSystemFormDto = UpdateSystemDto & {
+  lastUpdateReason?: string | null;
+  updatedAt?: string | null;
+  updatedById?: number | null;
+  updatedBy: User | null;
+};
+export type FilterSystemDto = z.infer<typeof FindSystemSchema>;
