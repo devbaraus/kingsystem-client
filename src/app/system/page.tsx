@@ -39,17 +39,13 @@ export default function Page() {
     },
   });
 
-  const service = SystemService;
-
   const fetchSystems = useCallback(
     async (page: number, orderBy: string | undefined, data: FilterSystemDto) => {
-      return service
-        .list(page, orderBy, data, {
-          signal: abortControllerRef.current.signal,
-        })
-        .then((response) => {
-          setSystemsPagination(response as Pagination<System>);
-        });
+      return SystemService.list(page, orderBy, data, {
+        signal: abortControllerRef.current.signal,
+      }).then((response) => {
+        setSystemsPagination(response as Pagination<System>);
+      });
     },
     [],
   );
