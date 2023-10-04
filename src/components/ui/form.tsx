@@ -159,6 +159,37 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+const FormFieldSet = React.forwardRef<
+  HTMLFieldSetElement,
+  React.HTMLAttributes<HTMLFieldSetElement>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <fieldset
+      className={cn("space-y-4", className)}
+      ref={ref}
+      {...props}
+    >
+      {children}
+    </fieldset>
+  );
+});
+FormFieldSet.displayName = "FormFieldSet";
+
+const FormLegend = React.forwardRef<HTMLLegendElement, React.HTMLAttributes<HTMLLegendElement>>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <legend
+        className={cn("text-lg font-medium", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </legend>
+    );
+  },
+);
+FormLegend.displayName = "FormLegend";
+
 export {
   useFormField,
   Form,
@@ -168,4 +199,6 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormFieldSet,
+  FormLegend,
 };
