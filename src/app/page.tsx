@@ -1,5 +1,3 @@
-export default async function Home() {
-  // const session = await getServerSession(authOptions);
+import Page from "@/app/system/page";
 
-  return <main className="flex min-h-screen flex-col items-center justify-between p-24" />;
-}
+export default Page;
