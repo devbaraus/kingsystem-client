@@ -14,6 +14,7 @@ fetcher.interceptors.request.use(async (request) => {
   if (session) {
     request.headers["Authorization"] = `Bearer ${session.token}`;
   }
+
   return request;
 });
 
