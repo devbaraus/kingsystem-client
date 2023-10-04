@@ -1,3 +1,5 @@
+"use client";
+
 import CreateFormSystem from "@/components/system/create-form-system";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
