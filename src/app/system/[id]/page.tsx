@@ -24,32 +24,35 @@ export default function Page() {
   });
   const [state, setState] = useState<State>(State.LOADING);
 
-  const fetchSystem = useCallback(async (id: number, state: State = State.LOADING) => {
-    setState(state);
+  const fetchSystem = useCallback(
+    async (id: number, state: State = State.LOADING) => {
+      setState(state);
 
-    const system = await SystemService.get(id);
+      const system = await SystemService.get(id);
 
-    if (!system) return;
+      if (!system) return;
 
-    const updatedById = system.updatedById || system.createdById;
-    const updatedAt = system.updatedAt || system.createdAt;
-    const lastUpdateReason = system.updateReason;
-    const updatedBy = await UserService.get(updatedById!);
+      const updatedById = system.updatedById || system.createdById;
+      const updatedAt = system.updatedAt || system.createdAt;
+      const lastUpdateReason = system.updateReason;
+      const updatedBy = await UserService.get(updatedById!);
 
-    form.reset({
-      acronym: system.acronym,
-      description: system.description,
-      email: system.email || "",
-      url: system.url || "",
-      status: system.status,
-      updateReason: "",
-      updatedAt,
-      lastUpdateReason,
-      updatedBy,
-    });
+      form.reset({
+        acronym: system.acronym,
+        description: system.description,
+        email: system.email || "",
+        url: system.url || "",
+        status: system.status,
+        updateReason: "",
+        updatedAt,
+        lastUpdateReason,
+        updatedBy,
+      });
 
-    setState(State.DONE);
-  }, []);
+      setState(State.DONE);
+    },
+    [form],
+  );
 
   function onSubmit(data: UpdateSystemFormDto) {
     return SystemService.update(Number(id), data).then(() => {
